@@ -1,0 +1,34 @@
+[user]
+	name = Nathan Morse
+	email = nmorse@cboe.com
+[core]
+	editor = nvim
+	pager = less -FRXS
+[color]
+	ui = true
+[svn]
+	rmdir = true
+[merge]
+	tool = vimdiff
+	summary = true
+[push]
+	default = simple
+[pull]
+	rebase = true
+[alias]
+    st = status
+    co = checkout
+    br = branch
+    since = log HEAD --not master --stat --no-merges
+    sa = "!f() { git add -A; git stash; }; f"
+    sp = stash pop
+    aa = add -A
+    rekt = push --force
+    ca = "!f() { git add -A; git commit; }; f"
+
+    sd = svn dcommit
+    revshow = "!f() { git show --stat $(git svn find-rev r${1}); }; f"
+    mybranch = "!f() { git branch -r | grep nmorse; }; f"
+
+    adz = "!f() { local files; files=$(git st --porcelain | sed \"s/^...//\" | fzf --multi --preview \"git diff {}\") && git add ${files}; }; f"
+    coz = "!f() { local branches branch; branches=$(git --no-pager branch -vv) && branch=$(echo \"$branches\" | fzf +m) && git checkout $(echo \"$branch\" | awk '{print $1}' | sed \"s/.* //\"); }; f"
