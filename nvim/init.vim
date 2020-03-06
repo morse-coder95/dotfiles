@@ -22,7 +22,6 @@ Plug 'machakann/vim-sandwich'
 Plug 'mhinz/vim-startify'
 Plug 'haya14busa/incsearch.vim'
 Plug 'voldikss/vim-floaterm'
-
 Plug 'scrooloose/nerdcommenter'
 Plug 'prettier/vim-prettier', {'do': 'npm install'}
 Plug 'easymotion/vim-easymotion'
@@ -30,6 +29,8 @@ Plug 'Yggdroot/indentLine'
 Plug 'rhysd/git-messenger.vim'
 Plug 'majutsushi/tagbar'
 Plug 'fisadev/vim-isort'
+Plug 'rhysd/committia.vim'
+Plug 'terryma/vim-multiple-cursors'
 
 
 call plug#end()
@@ -171,6 +172,9 @@ cnoreabbrev Ack Ack!
 let g:ale_linters = {
 \   'python': ['flake8']
 \}
+let g:ale_fixers = {
+\   'python': ['autopep8']
+\}
 let g:ale_sign_column_always = 1
 let g:ale_completion_enabled = 0
 let g:ale_lint_on_text_changed = 'always'
@@ -235,7 +239,8 @@ let g:which_key_map.a = {
     \'name': '+ale',
     \'t': [':ALEToggle', 'toggle'],
     \'p': ['<Plug>(ale_previous_wrap)', 'previous error'],
-    \'n': ['<Plug>(ale_next_wrap)', 'next error']
+    \'n': ['<Plug>(ale_next_wrap)', 'next error'],
+    \'f': [':ALEFix', 'fix']
     \}
 
 """" Buffers
