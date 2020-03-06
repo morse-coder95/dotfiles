@@ -14,7 +14,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'jiangmiao/auto-pairs'
 Plug 'w0rp/ale'
 Plug 'ayu-theme/ayu-vim'
-Plug 'rhysd/committia.vim'
+"Plug 'rhysd/committia.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'liuchengxu/vim-which-key'
 Plug 'janko/vim-test'
@@ -250,6 +250,7 @@ let g:which_key_map.b = {
 
 """" NERDCommenter
 let g:which_key_map.c = {'name': '+nerd_commenter'}
+let g:NERDDefaultAlign = 'left'
 
 """" Fuzzy Finding
 let g:which_key_map.f = {
