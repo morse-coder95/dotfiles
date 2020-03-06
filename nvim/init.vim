@@ -14,7 +14,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'jiangmiao/auto-pairs'
 Plug 'w0rp/ale'
 Plug 'ayu-theme/ayu-vim'
-"Plug 'rhysd/committia.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'liuchengxu/vim-which-key'
 Plug 'janko/vim-test'
@@ -30,7 +29,6 @@ Plug 'easymotion/vim-easymotion'
 Plug 'Yggdroot/indentLine'
 Plug 'rhysd/git-messenger.vim'
 Plug 'majutsushi/tagbar'
-Plug 'preservim/nerdtree'
 Plug 'fisadev/vim-isort'
 
 
@@ -300,13 +298,7 @@ let g:which_key_map.l = {
     \}
 
 """" toggle normal mode
-let g:which_key_map.n = {
-            \'name': '+nerdtree',
-            \'p': [':NERDTree ~/source/python', 'open python dir'],
-            \'w': [':NERDTree', 'open working dir'],
-            \'t': [':NERDTreeToggle', 'toggle'],
-            \'q': [':NERDTreeClose', 'close']
-            \}
+let g:which_key_map.n = [':call ToggleNormalMode()', 'toggle normal mode']
 
 """" Tests
 let g:which_key_map.t = {
