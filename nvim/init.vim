@@ -27,10 +27,10 @@ Plug 'prettier/vim-prettier', {'do': 'npm install'}
 Plug 'easymotion/vim-easymotion'
 Plug 'Yggdroot/indentLine'
 Plug 'rhysd/git-messenger.vim'
-Plug 'majutsushi/tagbar'
 Plug 'fisadev/vim-isort'
-Plug 'rhysd/committia.vim'
 Plug 'terryma/vim-multiple-cursors'
+Plug 'psf/black'
+Plug 'machakann/vim-highlightedyank'
 
 
 call plug#end()
@@ -46,32 +46,22 @@ set expandtab tabstop=4 shiftwidth=4 smarttab
 set number norelativenumber
 set lazyredraw
 set nowrap
-set clipboard+=unnamedplus
-set clipboard=unnamedplus
+set inccommand=nosplit
 filetype plugin on      " Allow filetype plugins to be enabled
 
 
 """ Plugin Settings
 
-"""" Tagbar
-let g:tagbar_sort = 0
-let g:tagbar_width = 65
-autocmd FileType python nested :TagbarOpen
+"""" Floaterm
+let g:floaterm_width = 0.9
+let g:floaterm_height = 0.7
 
-let g:tagbar_type_python = {
-    \ 'kinds' : [
-        \ 'i:imports:1:0',
-        \ 'c:classes',
-        \ 'f:functions',
-        \ 'm:members',
-        \ 'v:variables:0:0',
-        \ '?:unknown',
-    \ ],
-\ }
+"""" Black
+let g:black_virtualenv = '~/.virtualenvs/neovim'
+let g:black_linelength = 99
 
 """" UltiSnips
 let g:python_host_prog = '/opt/bats/bin/python'
-"let g:python_host_prog = '~/.virtualenvs/neovim/bin/python'
 let g:python3_host_prog = '~/.virtualenvs/neovim/bin/python3'
 let g:UltiSnipsExpandTrigger = "<c-f>"
 let g:UltiSnipsJumpForwardTrigger = "<M-n>"
@@ -120,51 +110,6 @@ let g:SimpylFold_fold_import = 0
 let g:fastfold_force = 1
 let g:fastfold_savehook = 0
 
-"""" FZF
-let g:fzf_layout = { 'window': 'call FloatingFZF(0.9, 0.6, "Comment")' }
-
-" File searching with ag
-command! -bang -nargs=* RgPython
-  \ call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>) . ' ~/source/python', 1,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
-command! -bang -nargs=* RgDbNodes
-  \ call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>) . ' ~/db/nodes', 1,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
-command! -bang -nargs=* RgEquities
-  \ call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>) . ' ~/source/python/ecn', 1,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
-command! -bang -nargs=* RgOptions
-  \ call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>) . ' ~/source/python/opt', 1,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
-command! -bang -nargs=* RgFutures
-  \ call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>) . ' ~/source/python/cfe', 1,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
-command! -bang -nargs=* RgSource
-  \ call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>) . ' ~/source', 1,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
-let g:ackprg = 'ag --vimgrep'
-command! -bang -nargs=* Ag
-  \ call fzf#vim#ag(<q-args>,
-  \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
 cnoreabbrev Ack Ack!
 
 """" Ale
@@ -182,6 +127,7 @@ let g:ale_lint_on_text_changed = 'always'
 """" WhichKey
 let g:which_key_map = {}
 call which_key#register('<Space>', "g:which_key_map")
+
 set timeoutlen=750
 
 """" GitGutter
@@ -217,7 +163,7 @@ hi! Folded guifg=#00b3b3
 """" vim-startify
 autocmd User Startified setlocal buflisted  " necessary to integrate nicely with vim-float
 let g:startify_session_persistence = 1  " auto-save which buffers are in the session
-let g:startify_custom_header = startify#pad(split(system('echo n\(athan\)vim | cowsay -f ghostbusters'), '\n'))
+let g:startify_custom_header = startify#pad(split(system('echo n\(athan\)vim | cowsay -f turtle'), '\n'))
 
 
 """" incsearch
@@ -230,25 +176,35 @@ let g:incsearch#auto_nohlsearch = 1  " automatically turn off highlighting when 
 " defined above it
 let mapleader = ' '
 
-"""" WhichKey
-nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
-vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
-
 """"" Linting
 let g:which_key_map.a = {
     \'name': '+ale',
     \'t': [':ALEToggle', 'toggle'],
     \'p': ['<Plug>(ale_previous_wrap)', 'previous error'],
     \'n': ['<Plug>(ale_next_wrap)', 'next error'],
-    \'f': [':ALEFix', 'fix']
+    \'f': [':ALEFix', 'fix'],
+    \'b': [':Black', 'blacken']
     \}
 
 """" Buffers
 let g:which_key_map.b = {
-    \'name': '+buffers',
-    \'p': [':bp', 'previous'],
-    \'n': [':bn', 'next'],
-    \'d': [':bd', 'kill current'],
+    \'name': '+bootstrap',
+    \'m': [
+        \':call PromptedFloaterm("bootstrap.py --skip-krbtgt -dfq --db-types=mongo $(envs.py dev ", ")")',
+        \'Bootstrap mongo'
+    \],
+    \'p': [
+        \':call PromptedFloaterm("bootstrap.py --skip-krbtgt -dfq --with-pending --db-types=mongo $(envs.py dev ", ")")',
+        \'Bootstrap mongo pending'
+    \],
+    \'d': [
+        \':call PromptedFloaterm("bootstrap.py --skip-krbtgt -dfq --with-delta --db-types=mongo $(envs.py dev ", ")")',
+        \'Bootstrap mongo pending'
+    \],
+    \'i': [
+        \':call PromptedFloaterm("bootstrap.py --skip-krbtgt -dfq --with-diff --db-types=mongo $(envs.py dev ", ")")',
+        \'Bootstrap mongo pending'
+    \],
     \}
 
 """" NERDCommenter
@@ -260,24 +216,17 @@ let g:which_key_map.f = {
     \'name': '+find',
     \'f': {
         \'name': '+file_name_search',
-        \'p': [':FZF ~/source/python/', 'python'],
-        \'o': [':FZF ~/source/python/opt/', 'options'],
-        \'e': [':FZF ~/source/python/ecn/', 'equities'],
-        \'f': [':FZF ~/source/python/cfe/', 'futures'],
-        \'d': [':FZF ~/db/nodes/', 'db'],
-        \'s': [':FZF ~/source/', 'source'],
-        \'h': [':FZF', 'here'],
-        \'~': [':FZF ~/', 'home']
+        \'p': [":call _FloatermFZF('~/python/')", 'python'],
+        \'d': [":call _FloatermFZF('~/db/')", 'db'],
+        \'s': [":call _FloatermFZF('~/source/')", 'source'],
+        \'h': [":call _FloatermFZF('NONE')", 'here'],
     \},
     \'r': {
         \'name': '+file_content_search_regex',
-        \'p': [':RgPython', 'python'],
-        \'e': [':RgEquities', 'ecn'],
-        \'o': [':RgOptions', 'opt'],
-        \'f': [':RgFutures', 'cfe'],
-        \'s': [':RgSource', 'source'],
-        \'d': [':RgDbNodes', 'dbnodes'],
-        \'h': [':Rg', 'here'],
+        \'p': [":call PromptedFloatermSearch('~/python/')", 'python'],
+        \'d': [":call PromptedFloatermSearch('~/db/')", 'db'],
+        \'s': [":call PromptedFloatermSearch('~/source/')", 'source'],
+        \'h': [":call PromptedFloatermSearch('NONE')", 'here']
     \},
     \}
 
@@ -293,14 +242,6 @@ let g:which_key_map.g = {
     \'m': [':GitMessenger', 'message preview']
     \}
 
-""""
-let g:which_key_map.l = {
-    \'name': '+tagbar',
-    \'l': [':TagbarOpen fj', 'open and focus tagbar'],
-    \'o': [':TagbarOpen', 'open tagbar'],
-    \'c': [':TagbarClose', 'close tagbar'],
-    \'t': [':TagbarToggle', 'toggle tagbar']
-    \}
 
 """" toggle normal mode
 let g:which_key_map.n = [':call ToggleNormalMode()', 'toggle normal mode']
@@ -310,7 +251,7 @@ let g:which_key_map.t = {
     \'name': '+tests',
     \'f': [':TestFile', 'Run current test file'],
     \'l': [':TestLast', 'Run last run test'],
-    \'n': [':TestNearest', 'Run test nearest cursor'],
+    \'n': [':call TestNearest()', 'Run test nearest cursor'],
     \'c': [':set autochdir | :call FloatingTest("nosetests --verbose -a current ")', 'Run current test']
     \}
 
@@ -327,6 +268,16 @@ let g:which_key_map.y = {
     \'r': [':YcmCompleter GoToReferences', 'GotoReferences'],
     \}
 
+let g:which_key_map.z = {
+    \'name': 'floaterm',
+    \"t": [":FloatermToggle", "toggle"],
+    \"f": [":call _FloatermPathCmd('cd', '%:p:h')", "open on file"],
+    \"n": [":FloatermNew", "open new"],
+    \"k": [":FloatermKill", "kill"]
+    \}
+let g:which_key_map.s = [':Startify', 'pull up startify']
+
+
 """" Easy Motion
  " <Leader><Leader> is annoying, turn it off
 "map <Leader> <Plug>(easymotion-prefix)
@@ -337,6 +288,9 @@ let g:EasyMotion_smartcase = 1
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 
+"""" WhichKey
+nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
+vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
 
 """" General
 map <F1> :w <CR>
@@ -471,7 +425,95 @@ if has('nvim-0.4.0')
 endif
 
 
+function! _FloatermPathCmd(cmd, path)
+    call floaterm#new(a:cmd . ' ' . expand(a:path), {}, {}, v:true)
+endfunction
 
+function! PromptedFloaterm(preCmd, postCmd)
+    call inputsave()
+    let l:result = input(a:preCmd . '%s' . a:postCmd . ' : ')
+    call inputrestore()
+    redraw
+    execute ':FloatermNew! ' . a:preCmd . result . a:postCmd
+endfunction
+
+function! PromptedFloatermBootstrap_withDiffApply()
+    call inputsave()
+    let l:delta = input('delta num : ')
+    call inputrestore()
+
+    let l:preCmd = 'bootstrap.py --skip-krbtgt -dfq --db-types=mongo --with-diff-apply=' . delta . ' $(envs.py dev '
+
+    call inputsave()
+    let l:env = input(preCmd . '%s' . ')' . ' : ')
+    call inputrestore()
+    redraw
+    execute ':FloatermNew! ' . preCmd . env . ')'
+endfunction
+
+function! _OpeningCallback(...) abort
+    if filereadable('/tmp/floaterm-tmp-nonsense')
+    let filenames = readfile('/tmp/floaterm-tmp-nonsense')
+    if !empty(filenames)
+        if has('nvim')
+            call floaterm#window#hide_floaterm(bufnr('%'))
+        endif
+        for filename in filenames
+            execute g:floaterm_open_command . ' ' . fnameescape(filename)
+        endfor
+    endif
+  endif
+endfunction
+
+function! _FloatermFZF(path)
+    if a:path ==# 'CURRENT_FILE'
+        let l:path = expand('%:p:h')
+    elseif a:path ==# 'NONE'
+        let l:path = ''
+    else
+        let l:path = a:path
+    endif
+    call floaterm#terminal#open(
+        \-1,
+        \'find ' . l:path . ' -type f | fzf -m > /tmp/floaterm-tmp-nonsense',
+        \{'on_exit': funcref('_OpeningCallback')},
+        \{},
+        \)
+endfunction
+
+function! _FloatermSearch(path, term)
+    if a:path ==# 'CURRENT_FILE'
+        let l:path = expand('%:p:h')
+    elseif a:path ==# 'NONE'
+        let l:path = ''
+    else
+        let l:path = a:path
+    endif
+    let l:rg_cmd = 'rg -S --files-with-matches --no-messages "' . a:term . '" ' . l:path .''
+    let l:preview_cmd = "highlight -O ansi -l {} 2> /dev/null | rg --colors 'match:bg:yellow' --ignore-case --pretty --context 10 '" . a:term . "' || rg --ignore-case --pretty --context 10 '" . a:term . "' {}"
+    let l:fif_cmd = l:rg_cmd . ' | fzf -m --reverse --preview="' . l:preview_cmd . '" > /tmp/floaterm-tmp-nonsense'
+    call floaterm#terminal#open(
+        \-1,
+        \l:fif_cmd,
+        \{'on_exit': funcref('_OpeningCallback')},
+        \{},
+        \)
+endfunction
+
+function! PromptedFloatermSearch(path)
+    call inputsave()
+    let l:search = input('Search regex: ')
+    call inputrestore()
+    redraw
+    call _FloatermSearch(a:path, l:search)
+endfunction
+
+
+function! TestNearest()
+    let l:class = split(split(getline(search('^class', 'bn')))[1], '(')[0]
+    let l:method = split(split(getline(search('^\s*def test', 'bW')))[1], '(')[0]
+    execute ':FloatermNew! nosetests -v ' . expand('%:p:h') . '/' . expand('%:t') . ':' . l:class . '.' . l:method
+endfunction
 
 " Commands to edit or reload this file
 command! Editconf :edit ~/.config/nvim/init.vim
@@ -501,7 +543,6 @@ autocmd BufEnter * set fo-=c fo-=r fo-=o  " stop annoying auto commenting on new
 " :cw           open the quickfix window if errors, otherwise close it
 
 " Old stuff
-"set clipboard+=unnamedplus
 "inoremap jj <ESC>
 " Toggle to keep cursor centered in the screen
 "nnoremap <Leader>zz :let &scrolloff=999-&scrolloff<CR>
