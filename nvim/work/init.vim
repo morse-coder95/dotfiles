@@ -98,9 +98,6 @@ augroup mygroup
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
 """"" Actual settings
 let g:coc_global_extensions = [
     \'coc-python',
@@ -222,16 +219,13 @@ let g:NERDCreateDefaultMappings = 0
 let g:NERDDefaultAlign = 'left'
 
 """" coc
-let g:which_key_map.c = {
-    \'name': '+coc',
-    \'g': {
-        \'name': '+goto',
+let g:which_key_map.y = {
+    \'name': '+goto',
         \'d': ['<Plug>(coc-definition)', 'definition'],
         \'r': ['<Plug>(coc-references)', 'references'],
-    \},
-    \'b': [":call CocAction('format')", 'blacken'],
-    \'i': [":call CocAction('runCommand', 'editor.action.organizeImport')", "sort imports"],
     \}
+
+let g:which_key_map.b = [":call CocAction('format')", 'blacken']
 
 """" Fuzzy Finding
 let g:which_key_map.f = {
