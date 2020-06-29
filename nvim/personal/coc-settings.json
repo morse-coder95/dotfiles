@@ -1,0 +1,18 @@
+{
+    "http.proxyStrictSSL": false,
+    "https.proxyStrictSSL": false,
+    "https.rejectUnauthorized": false,
+    "python.pythonPath": "/home/nmorse/.virtualenvs/neovim/bin/python3",
+    "python.venvPath": "/home/nmorse/.virtualenvs",
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": ["--ignore=E501"],
+    "python.linting.enabled": true,
+    "diagnostic.checkCurrentLine": true,
+    "python.formatting.provider": "black",
+    "python.formatting.blackPath": "/home/nmorse/.virtualenvs/neovim/bin/black",
+    "python.formatting.blackArgs": ["--line-length=99"],
+    "git.enableGutters": true,
+    "session.directory": "~/.local/share/nvim/session",
+    "list.source.files.args": ["--hidden", "--files"]
+}

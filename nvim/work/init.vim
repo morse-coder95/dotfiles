@@ -208,15 +208,15 @@ let g:startify_custom_header = startify#pad(split(system('echo n\(athan\)vim | c
 set hlsearch
 let g:incsearch#auto_nohlsearch = 1  " automatically turn off highlighting when navigating off
 
+"""" NERDCommenter
+let g:NERDCreateDefaultMappings = 0
+let g:NERDDefaultAlign = 'left'
+
 """ Key Bindings
 """" Change leader key to space (KEEP ABOVE OTHER LEADER MAPPINGS)
 " This has to be higher in the file than any <Leader> mappings, since it resets any leader mappings
 " defined above it
 let mapleader = ' '
-
-"""" NERDCommenter
-let g:NERDCreateDefaultMappings = 0
-let g:NERDDefaultAlign = 'left'
 
 """" coc (replace YCM)
 let g:which_key_map.y = {
@@ -300,12 +300,9 @@ vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
 """" General
 map <F1> :w <CR>
 map <F2> :noh <CR>
-nnoremap Y y$
-nnoremap U <c-r>
 nmap <Tab> :bn<CR>
 nmap <S-Tab> :bp<CR>
 map <C-Space> :call NERDComment('n', 'Toggle')<CR>
-let @a='?def test:nohO@attr("current")'
 tnoremap <C-\> <C-\><C-N>
 
 """" Split Navigation
