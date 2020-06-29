@@ -218,7 +218,7 @@ let mapleader = ' '
 let g:NERDCreateDefaultMappings = 0
 let g:NERDDefaultAlign = 'left'
 
-"""" coc
+"""" coc (replace YCM)
 let g:which_key_map.y = {
     \'name': '+goto',
         \'d': ['<Plug>(coc-definition)', 'definition'],
@@ -270,7 +270,8 @@ let g:which_key_map.t = {
     \'l': [':TestLast', 'Run last run test'],
     \'n': [':TestNearest', 'Run test nearest cursor'],
     \'s': [':TestSuite', 'Run test suite'],
-    \'c': [":set autochdir | :call TestCurrent('%:p')", 'Run current test']
+    \'c': [":set autochdir | :call TestCurrent('%:p')", 'Run current test'],
+    \'o': [":set autochdir | :call TestCoverage('%:p')", 'Run current test file w/ coverage']
     \}
 
 let g:which_key_map.z = {
@@ -348,6 +349,10 @@ function! TestCurrent(path)
     call floaterm#new(-1, l:cmd, {}, {})
 endfunction
 
+function! TestCoverage(path)
+    let l:cmd = 'nosetests ' . expand(a:path) . '  --with-cov --cov=../"${1//test_}" --cov-report=term-missing --cov-config ~/.coveragerc --verbose'
+    call floaterm#new(-1, l:cmd, {}, {})
+endfunction
 
 " Commands to edit or reload this file
 command! Editconf :edit ~/.config/nvim/init.vim
