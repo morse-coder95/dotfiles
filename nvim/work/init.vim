@@ -33,17 +33,17 @@ Plug 'machakann/vim-highlightedyank'
 call plug#end()
 
 """ General Config
-set mouse=a
-set ignorecase
-set cursorline
+"set mouse=a
+set ignorecase  " case-insensitive search
+set cursorline  " highligh the current line
 set colorcolumn=100
 set textwidth=100
-set formatoptions-=t
+set formatoptions-=t  " remove autowrap formatting
 set expandtab tabstop=4 shiftwidth=4 smarttab
 set number norelativenumber
 set lazyredraw
 set nowrap
-set inccommand=nosplit
+set inccommand=nosplit  " interactive search and replace
 filetype plugin on      " Allow filetype plugins to be enabled
 
 
@@ -303,13 +303,10 @@ map <F2> :noh <CR>
 nmap <Tab> :bn<CR>
 nmap <S-Tab> :bp<CR>
 map <C-Space> :call NERDComment('n', 'Toggle')<CR>
-tnoremap <C-\> <C-\><C-N>
+let @a='?def test:nohO@attr("current")'
 
-"""" Split Navigation
-nnoremap <C-j> <C-W><down>
-nnoremap <C-k> <C-W><up>
-nnoremap <C-l> <C-W><right>
-nnoremap <C-h> <C-W><left>
+" to leave a floaterm window without killing it
+tnoremap <C-\> <C-\><C-N>
 
 """" incsearch
 " zz appended to center the search on the screen
