@@ -1,2 +1,2 @@
 # dotfiles
-config files
+Generator for configuration files between home and work environments
