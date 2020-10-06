@@ -1,5 +1,7 @@
+# byte-compiled
 __pycache__/
 *.py[cod]
 
 # don't store build directory
 /compiled/
+compiled/
