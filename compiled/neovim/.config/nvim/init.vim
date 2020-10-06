@@ -128,7 +128,7 @@ let g:floaterm_width = 0.9
 let g:floaterm_height = 0.7
 
 let g:python_host_prog = '/opt/bats/bin/python'
-let g:python3_host_prog = '/opt/bats/bin/python3'
+let g:python3_host_prog = '/home/nmorse/.virtualenvs/neovim/bin/python3'
 
 """" UltiSnips
 let g:UltiSnipsExpandTrigger = "<c-f>"
