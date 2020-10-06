@@ -4,4 +4,4 @@ __pycache__/
 
 # don't store build directory
 /compiled/
-compiled/
+compiled/*

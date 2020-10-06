@@ -2,7 +2,7 @@
     "http.proxyStrictSSL": false,
     "https.proxyStrictSSL": false,
     "https.rejectUnauthorized": false,
-    "python.pythonPath": "/home/nmorse/.virtualenvs/neovim2/bin/python3",
+    "python.pythonPath": "/home/nmorse/.virtualenvs/neovim/bin/python3",
     "python.venvPath": "/home/nmorse/.virtualenvs",
     "python.linting.pylintEnabled": false,
     "python.linting.flake8Enabled": true,

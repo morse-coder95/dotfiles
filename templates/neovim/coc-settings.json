@@ -3,7 +3,7 @@
     "https.proxyStrictSSL": false,
     "https.rejectUnauthorized": false,
     {% if HOST in ('work',) %}
-    "python.pythonPath": "/home/nmorse/.virtualenvs/neovim2/bin/python3",
+    "python.pythonPath": "/home/nmorse/.virtualenvs/neovim/bin/python3",
     {% elif HOST in ('home',) %}
     "python.pythonPath": "/usr/bin/python3",
     {% endif %}
