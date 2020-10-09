@@ -1,7 +1,7 @@
 from util import Git, Neovim, PythonDev, Tmux, Host, Inputrc
 
 # __BASE_CONFIG = {Git, Neovim, PythonDev, Tmux, Inputrc}
-__BASE_CONFIG = {Neovim}
+__BASE_CONFIG = {Neovim, Tmux}
 
 CONFIGS = {
     Host.Home: __BASE_CONFIG,
