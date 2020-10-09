@@ -84,16 +84,6 @@ class Tmux(Config):
     ]
 
 
-class PythonDev(Config):
-    name = "python-dev"
-    files = [
-        ConfigFile("pdb.conf", ".pdbrc"),
-        ConfigFile("flake8.conf", ".config/flake8"),
-        ConfigFile("isort.conf", ".isort.cfg"),
-        ConfigFile("style.ini", ".config/yapf/style"),
-    ]
-
-
 class Git(Config):
     name = "git-config"
     files = [
@@ -104,3 +94,8 @@ class Git(Config):
 class Inputrc(Config):
     name = "inputrc"
     files = [ConfigFile("inputrc", ".inputrc")]
+
+
+class Bashrc(Config):
+    name = "bashrc"
+    files = [ConfigFile("bashrc", ".bashrc")]
