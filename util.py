@@ -72,8 +72,8 @@ class Neovim(Config):
     files = [
         ConfigFile("neovim.conf", ".config/nvim/init.vim"),
         ConfigFile("coc-settings.json", ".config/nvim/coc-settings.json"),
-        # ConfigFile("python-snippets.conf", ".config/nvim/UltiSnips/python.snippets"),
-        # ConfigFile('sql-snippets.conf', '.config/nvim/UltiSnips/sql.snippets'),
+        ConfigFile("python-snippets.conf", ".config/nvim/UltiSnips/python.snippets"),
+        ConfigFile('sql-snippets.conf', '.config/nvim/UltiSnips/sql.snippets'),
     ]
 
 
