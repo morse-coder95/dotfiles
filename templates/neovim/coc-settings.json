@@ -14,7 +14,7 @@
     "python.linting.enabled": true,
     "diagnostic.checkCurrentLine": true,
     "python.formatting.provider": "black",
-    "python.formatting.blackPath": "/home/nmorse/.virtualenvs/neovim2/bin/black",
+    "python.formatting.blackPath": "/home/nmorse/.virtualenvs/neovim/bin/black",
     "python.formatting.blackArgs": ["--line-length=99"],
     "git.enableGutters": true,
     "session.directory": "~/.local/share/nvim/session",
