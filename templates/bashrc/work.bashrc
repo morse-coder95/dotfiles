@@ -35,6 +35,7 @@ alias nt="nosetests --verbose"
 alias cl="clear"
 alias jump="ssh lxlc-jump05"
 alias mylogs="git log --author $(whoami) --stat"
+alias npmrun='NODE_OPTIONS="--max-old-space-size=4096" npm run server'
 
 function envstat() {
     if [ -z "$1" ]; then
@@ -82,7 +83,7 @@ new () {
 }
 
 boot() {
-    if [[ $1 =~ ^("bzx"|"byx"|"edga"|"edgx"|"opt"|"exo"|"ctwo"|"cone"|"cfe"|"idx"|"usc"|"global")$ ]]; then
+    if [[ $1 =~ ^("bzx"|"byx"|"edga"|"edgx"|"opt"|"exo"|"ctwo"|"cone"|"cfe"|"idx"|"usc"|"global"|"mnow")$ ]]; then
         set -x
         ~/source/db/code/bootstrap.py -dfq --db-types=mongo $2 nmorse_$1
         set +x
@@ -94,14 +95,14 @@ boot() {
 }
 
 bsql() {
-    if [[ $1 =~ ^("bzx"|"byx"|"edga"|"edgx"|"opt"|"exo"|"ctwo"|"cone"|"cfe"|"idx"|"usc"|"global")$ ]]; then
+    if [[ $1 =~ ^("bzx"|"byx"|"edga"|"edgx"|"opt"|"exo"|"ctwo"|"cone"|"cfe"|"idx"|"usc"|"global"|"mnow")$ ]]; then
         bsql.sh $(whoami)_$1 $2 $3
     else
         bsql.sh $1 $2 $3
     fi
 }
 csql() {
-    if [[ $1 =~ ^("bzx"|"byx"|"edga"|"edgx"|"opt"|"exo"|"ctwo"|"cone"|"cfe"|"idx"|"usc"|"global")$ ]]; then
+    if [[ $1 =~ ^("bzx"|"byx"|"edga"|"edgx"|"opt"|"exo"|"ctwo"|"cone"|"cfe"|"idx"|"usc"|"global"|"mnow")$ ]]; then
         csql.sh $(whoami)_$1 $2 $3
     else
         csql.sh $1 $2 $3
