@@ -46,7 +46,7 @@ function envstat() {
     else
         status="'$2'";
     fi
-    echo "select s.batch_job_name, s.batch_dt, s.status, s.status_ts, s.machine_name from batch_job_status s inner join batch_job b on s.batch_job_name = b.name and b.data_center_name = get_location() where b.privilege = 'batch' and s.status in ($status);" | mbsql --tight $(envs.py $1 us trading)
+    echo "select s.batch_job_name, s.batch_dt, s.status, s.status_ts, s.machine_name from batch_job_status s inner join batch_job b on s.batch_job_name = b.name and b.data_center_name = get_location() where b.privilege = 'batch' and s.status in ($status);" | mbsql --tight $(envs.py $1 us ca trading)
 }
 
 function fif() {
