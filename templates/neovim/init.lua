@@ -2,28 +2,29 @@ local cmd = vim.cmd  -- to execute Vim commands e.g. cmd('pwd')
 local fn = vim.fn    -- to call Vim functions e.g. fn.bufnr()
 local g = vim.g      -- a table to access global variables
 local opt = vim.opt  -- to set options
+local fn = vim.fn
 
 -- Plugins
-cmd 'packadd paq-nvim'               -- load the package manager
-local paq = require('paq-nvim').paq  -- a convenient alias
-paq {'savq/paq-nvim', opt = true}    -- paq-nvim manages itself
-paq {'shougo/deoplete-lsp'}  -- autocompletion
-paq {'shougo/deoplete.nvim', run = fn['remote#host#UpdateRemotePlugins']}
-paq {'nvim-treesitter/nvim-treesitter'}
-paq {'neovim/nvim-lspconfig'}  -- facilitate configuration of language servers
-paq {'junegunn/fzf', run = fn['fzf#install']}
-paq {'junegunn/fzf.vim'}
-paq {'ojroques/nvim-lspfuzzy'}
-paq {'luxed/ayu-vim'}  -- color scheme
-paq {'psliwka/vim-smoothie'}  -- smooth scrolling
-paq {'liuchengxu/vim-which-key'}  -- shortcut mappings
-paq {'phaazon/hop.nvim'}  -- replacement for easymotion
-paq {'scrooloose/nerdcommenter'}  -- commenting shortcuts
-paq {'vim-airline/vim-airline'}  -- status and tab lines
-paq {'Yggdroot/indentLine'}  -- allow special indent characters
-paq {'psf/black'}  -- code formatter
-paq {'fisadev/vim-isort'}  -- sort python imports
-paq {'jiangmiao/auto-pairs'}
+require "paq" {
+    {'savq/paq-nvim', opt = true};    -- paq-nvim manages itself
+    {'shougo/deoplete-lsp'};  -- autocompletion
+    {'shougo/deoplete.nvim', run = fn['remote#host#UpdateRemotePlugins']};
+    {'nvim-treesitter/nvim-treesitter'};
+    {'neovim/nvim-lspconfig'};  -- facilitate configuration of language servers
+    {'junegunn/fzf', run = fn['fzf#install']};
+    {'junegunn/fzf.vim'};
+    {'ojroques/nvim-lspfuzzy'};
+    {'luxed/ayu-vim'};  -- color scheme
+    {'psliwka/vim-smoothie'};  -- smooth scrolling
+    {'liuchengxu/vim-which-key'};  -- shortcut mappings
+    {'phaazon/hop.nvim'};  -- replacement for easymotion
+    {'scrooloose/nerdcommenter'};  -- commenting shortcuts
+    {'vim-airline/vim-airline'};  -- status and tab lines
+    {'Yggdroot/indentLine'};  -- allow special indent characters
+    {'psf/black'};  -- code formatter
+    {'fisadev/vim-isort'};  -- sort python imports
+    {'jiangmiao/auto-pairs'};
+}
 
 -- Deoplete
 g['deoplete#enable_at_startup'] = 1  -- enable deoplete at startup
