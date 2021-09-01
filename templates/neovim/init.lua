@@ -2,7 +2,6 @@ local cmd = vim.cmd  -- to execute Vim commands e.g. cmd('pwd')
 local fn = vim.fn    -- to call Vim functions e.g. fn.bufnr()
 local g = vim.g      -- a table to access global variables
 local opt = vim.opt  -- to set options
-local fn = vim.fn
 
 -- Plugins
 require "paq" {
@@ -16,7 +15,10 @@ require "paq" {
     {'ojroques/nvim-lspfuzzy'};
     {'luxed/ayu-vim'};  -- color scheme
     {'psliwka/vim-smoothie'};  -- smooth scrolling
-    {'liuchengxu/vim-which-key'};  -- shortcut mappings
+    {  -- shortcut mappings
+        'folke/which-key.nvim',
+        config = function() require('which-key').setup {} end
+    };
     {'phaazon/hop.nvim'};  -- replacement for easymotion
     {'scrooloose/nerdcommenter'};  -- commenting shortcuts
     {'vim-airline/vim-airline'};  -- status and tab lines
@@ -24,7 +26,16 @@ require "paq" {
     {'psf/black'};  -- code formatter
     {'fisadev/vim-isort'};  -- sort python imports
     {'jiangmiao/auto-pairs'};
+    {'machakann/vim-highlightedyank'};  -- highlight yanked text
+    {'vim-scripts/BufOnly.vim'};  -- close all buffers except the active one
+    {'prettier/vim-prettier'};  -- js formatting
+    {'airblade/vim-gitgutter'};
 }
+
+-- git gutter
+g.gitgutter_map_keys = 0  -- no mappings
+opt.updatetime = 100
+
 
 -- Deoplete
 g['deoplete#enable_at_startup'] = 1  -- enable deoplete at startup
@@ -93,3 +104,25 @@ map('', '<C-Space>', ":call NERDComment('n', 'Toggle')<CR>")  -- C-Space to togg
 -- <Tab> to navigate the completion menu
 map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {expr = true})
 map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})
+local wk = require("which-key")
+wk.register(
+    {
+        b = {":Black<CR>", "blacken"},
+        h = {":HopLine<CR>", "hop"},
+        f = {
+            name = "find+",
+            f = {
+                name = "files+",
+                p = {"<cmd>cd ~/source/python<cr><cmd>FZF<cr>", "python"},
+                h = {"<cmd>cd ~/<cr><cmd>FZF<cr>", "home"},
+                s = {"<cmd>cd ~/source/scripts<cr><cmd>FZF<cr>", "scripts"},
+                c = {"<cmd>cd ~/source/cpp<cr><cmd>FZF<cr>", "cpp"},
+                w = {"<cmd>cd ~/source/web<cr><cmd>FZF<cr>", "web"},
+            },
+            r = {"<cmd>Rg<cr>", "words"}
+        },
+        s = {"<cmd>set autochdir<cr>", "cd cwd"},
+        p = {"<cmd>Prettier<cr>", "pretty"}
+    },
+    { prefix = '<leader>' }
+)
