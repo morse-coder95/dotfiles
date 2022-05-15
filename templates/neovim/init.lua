@@ -161,12 +161,14 @@ map('', '<C-Space>', ":call nerdcommenter#Comment('n', 'Toggle')<CR>")
 -- <Tab> to navigate the completion menu
 map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {expr = true})
 map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})
+-- for some reason HopLine doesn't work in visual mode using which key so just map it here
+map('', '<Leader>h', '<cmd>HopLine<CR>')
 local wk = require("which-key")
 wk.register(
     {
-        b = {":Black<CR>", "blacken"},
-        i = {":History<CR>", "history"},
-        h = {"<cmd>HopLine<CR>", "hop"},
+        b = {"<cmd>Black<CR>", "blacken"},
+        i = {"<cmd>History<CR>", "history"},
+        {% if HOST in ('home') %}
         f = {
             name = "find+",
             f = {
@@ -176,6 +178,7 @@ wk.register(
             },
             r = {"<cmd>Rg<cr>", "words"}
         },
+        {% endif %}
         s = {"<cmd>set autochdir<cr>", "cd cwd"},
         y = {
             name = "completion+",
@@ -186,4 +189,3 @@ wk.register(
     { prefix = '<leader>' }
 )
 require("which-key").setup {}
-
