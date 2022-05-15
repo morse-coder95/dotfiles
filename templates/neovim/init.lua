@@ -26,12 +26,15 @@ Plug 'fisadev/vim-isort'  -- sort python imports
 Plug 'jiangmiao/auto-pairs';
 Plug 'machakann/vim-highlightedyank'  -- highlight yanked text
 Plug 'vim-scripts/BufOnly.vim'  -- close all buffers except the active one
-Plug 'prettier/vim-prettier'  -- js formatting
 Plug 'airblade/vim-gitgutter'  -- show modified lines
 Plug 'SirVer/ultisnips'  -- snippets
-Plug 'vim-test/vim-test'  -- run tests within vim
 Plug 'Vimjas/vim-python-pep8-indent' -- fixes weird vim-jedi double indent
 Plug 'tpope/vim-fugitive'  -- git operations
+
+{% if HOST in ('work') %}
+Plug 'vim-test/vim-test'  -- run tests within vim
+Plug 'prettier/vim-prettier'  -- js formatting
+{% endif %}
 
 vim.call('plug#end')
 
@@ -56,21 +59,22 @@ g.python3_host_prog = '/home/nmorse/.virtualenvs/nvim/bin/python3'
 -- black
 g.black_linelength = 99
 
+{% if HOST in ('work') %}
 -- vim-test
 g["test#python#runner"] = "nose"
 g["test#echo_command"] = 1
+{% endif %}
 
 -- ultisnips
 g.UltiSnipsExpandTrigger = "<c-f>"
 g.UltiSnipsJumpForwardTrigger = "<M-n>"
 g.UltiSnipsJumpBackwardTrigger = "<M-p>"
-g.UltiSnipsSnippetsDir = "/home/nmorse/.config/nvim/UltiSnips"
-g.UltiSnipsSnippetDirectories = {'UltiSnips', '/home/nmorse/.config/UltiSnips'}
+g.UltiSnipsSnippetDirectories = {'UltiSnips', '/home/nmorse/.config/nvim/UltiSnips'}
 g.UltiSnipsEnableSnipMate = 0
 
 -- git gutter
 g.gitgutter_map_keys = 0  -- no mappings
-opt.updatetime = 100  -- default wa 4000 which was much too slow
+opt.updatetime = 100  -- default was 4000 which was much too slow
 
 -- Deoplete
 g['deoplete#enable_at_startup'] = 1  -- enable deoplete at startup
@@ -84,13 +88,15 @@ g.indentLine_char = '┆'
 -- Disable next-line autocommenting
 cmd 'autocmd BufEnter * set fo-=c fo-=r fo-=o'
 
+{% if HOST in ('work') %}
 cmd 'autocmd BufRead *sqli set ft=sql'
+{% endif %}
 
 -- tree sitter
 -- Here the maintained value indicates that we wish to use all maintained languages modules.
 -- You also need to set highlight to true otherwise the plugin will be disabled.
 local ts = require 'nvim-treesitter.configs'
-ts.setup {ensure_installed = 'maintained', highlight = {enable = true}}
+--ts.setup {highlight = {enable = true}}
 
 -- color
 g.ayucolor = 'dark'

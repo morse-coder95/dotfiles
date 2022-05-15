@@ -84,7 +84,11 @@ class Neovim(Config):
     name = "neovim"
     files = [
         ConfigFile("init.lua", ".config/nvim/init.lua", symlink_path=".config/nvim/init.lua"),
-        ConfigFile("python-snippets.conf", ".config/nvim/UltiSnips/python.snippets"),
+        ConfigFile(
+            "python-snippets.conf",
+            ".config/nvim/UltiSnips/python.snippets",
+            symlink_path=".config/nvim/UltiSnips/python.snippets",
+        ),
         ConfigFile("sql-snippets.conf", ".config/nvim/UltiSnips/sql.snippets"),
     ]
 
