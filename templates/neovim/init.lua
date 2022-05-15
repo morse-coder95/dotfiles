@@ -165,23 +165,12 @@ wk.register(
             name = "find+",
             f = {
                 name = "files+",
-                p = {"<cmd>cd ~/source/python<cr><cmd>FZF<cr>", "python"},
+                a = {"<cmd>cd ~/source/ace<cr><cmd>FZF<cr>", "ace"},
                 h = {"<cmd>cd ~/<cr><cmd>FZF<cr>", "home"},
-                s = {"<cmd>cd ~/source/scripts<cr><cmd>FZF<cr>", "scripts"},
-                c = {"<cmd>cd ~/source/cpp<cr><cmd>FZF<cr>", "cpp"},
-                w = {"<cmd>cd ~/source/web<cr><cmd>FZF<cr>", "web"},
-                d = {"<cmd>cd ~/db/<cr><cmd>FZF<cr>", "db"}
             },
             r = {"<cmd>Rg<cr>", "words"}
         },
         s = {"<cmd>set autochdir<cr>", "cd cwd"},
-        p = {"<cmd>Prettier<cr>", "pretty"},
-        t = {
-            name = "test+",
-            n = {"<cmd>TestNearest --verbose<cr>", "nearest"},
-            f = {"<cmd>TestFile --verbose<cr>", "file"},
-            l = {"<cmd>TestLast --verbose<cr>", "last"},
-        },
         y = {
             name = "completion+",
             d = {"<cmd>lua vim.lsp.buf.definition()<CR>", "definition"},

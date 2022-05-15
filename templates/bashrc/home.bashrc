@@ -1,34 +1,29 @@
-parse_git_branch() {
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+function vim() {
+    if [ ! "$#" -gt 0 ]; then
+        source ~/.virtualenvs/nvim/bin/activate && ~/apps/neovim/nvim.appimage && deactivate
+    else
+	source ~/.virtualenvs/nvim/bin/activate && ~/apps/neovim/nvim.appimage "$@" && deactivate
+    fi
 }
-#export PS1="\u@\h \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
-
-
 
 export EDITOR=nvim
-export PYTHONPATH="/home/nmorse/source/ace"
-export PATH="$PATH:/home/nmorse/source/ace/ace/execs"
+export PYTHONPATH="/home/nmorse/source"
+export PATH="$PATH:/home/nmorse/source/ace/scripts"
+export PAGER="less -S" psql
 
 alias cl="clear"
-alias cdace="cd ~/source/ace/ace"
-alias python="python3"
-alias pip="pip3"
-
+alias cdace="cd ~/source/ace/"
 alias st="git status"
 alias add="git add -A"
 alias vimbrc="vim ~/.bashrc"
-
-alias blk="black --line-length 99"
+alias aceprod="psql -U aceuser -p 5432 -h ace.cjloznbpxh0q.us-east-2.rds.amazonaws.com ace"
+alias ssh_luna="ssh ubuntu@170.75.175.80"
 
 set -o vi
 
 cdir () {
     mkdir -p -- "$1" &&
         cd -P -- "$1"
-}
-
-run () {
-    python3 $1 --verbose
 }
 
 
@@ -90,8 +85,11 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
+parse_git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
 if [ "$color_prompt" = yes ]; then
-    #PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(parse_git_branch)\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
@@ -152,3 +150,4 @@ if ! shopt -oq posix; then
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
