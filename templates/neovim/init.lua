@@ -167,6 +167,7 @@ local wk = require("which-key")
 wk.register(
     {
         b = {"<cmd>Black<CR>", "blacken"},
+        d = {"<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>", "diagnostics"},
         i = {"<cmd>History<CR>", "history"},
         {% if HOST in ('home') %}
         f = {
