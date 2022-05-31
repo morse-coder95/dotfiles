@@ -96,7 +96,7 @@ cmd 'autocmd BufRead *sqli set ft=sql'
 -- Here the maintained value indicates that we wish to use all maintained languages modules.
 -- You also need to set highlight to true otherwise the plugin will be disabled.
 local ts = require 'nvim-treesitter.configs'
---ts.setup {highlight = {enable = true}}
+ts.setup {highlight = {enable = true}}
 
 -- color
 g.ayucolor = 'dark'
@@ -178,6 +178,28 @@ wk.register(
                 h = {"<cmd>cd ~/<cr><cmd>FZF<cr>", "home"},
             },
             r = {"<cmd>Rg<cr>", "words"}
+        },
+        {% endif %}
+        {% if HOST in ('work') %}
+        f = {
+            name = "find+",
+            f = {
+                name = "files+",
+                p = {"<cmd>cd ~/source/python<cr><cmd>FZF<cr>", "python"},
+                h = {"<cmd>cd ~/<cr><cmd>FZF<cr>", "home"},
+                s = {"<cmd>cd ~/source/scripts<cr><cmd>FZF<cr>", "scripts"},
+                c = {"<cmd>cd ~/source/cpp<cr><cmd>FZF<cr>", "cpp"},
+                w = {"<cmd>cd ~/source/web<cr><cmd>FZF<cr>", "web"},
+                d = {"<cmd>cd ~/db/<cr><cmd>FZF<cr>", "db"}
+            },
+            r = {"<cmd>Rg<cr>", "words"}
+        },
+        p = {"<cmd>Prettier<cr>", "pretty"},
+        t = {
+            name = "test+",
+            n = {"<cmd>TestNearest --verbose<cr>", "nearest"},
+            f = {"<cmd>TestFile --verbose<cr>", "file"},
+            l = {"<cmd>TestLast --verbose<cr>", "last"},
         },
         {% endif %}
         s = {"<cmd>set autochdir<cr>", "cd cwd"},

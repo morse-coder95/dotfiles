@@ -27,7 +27,7 @@ log = configure_logging()
 def get_host():
     host = gethostname()
     log.info(f"Building configuration files for {host}")
-    return {"morsecodingmachine": Host.Home, "lxlc-nmor02": Host.Work, "kclc-nmor01": Host.Work}[
+    return {"morsecodingmachine": Host.Home, "lxlc-nmor02.etc.cboe.net": Host.Work, "kclc-nmor01.etc.cboe.net": Host.Work}[
         host
     ]
 

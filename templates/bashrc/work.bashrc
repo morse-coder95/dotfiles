@@ -23,16 +23,10 @@ source ~/git-completion.bash
 # User specific aliases and functions
 alias nosetests="nosetests-2.7"
 alias myssh='eval $(ssh-agent) && ssh-add && ln -sf ${SSH_AUTH_SOCK} ~/.ssh/ssh_auth_sock'
-alias venv="source ~/.virtualenvs/neovim/bin/activate"
-alias vim="/opt/bats/bin/nvim"
-alias vimbrc="vim ~/.bashrc"
 alias nodes="cd ~/db/nodes && ls"
 alias cdp="cd ~/source/python"
 alias st="git status"
 alias add="git add -A"
-alias ntac="nosetests --verbose -a current"
-alias nt="nosetests --verbose"
-alias cl="clear"
 alias jump="ssh lxlc-jump05"
 alias mylogs="git log --author $(whoami) --stat"
 alias npmrun='NODE_OPTIONS="--max-old-space-size=4096" npm run server'
@@ -94,19 +88,8 @@ boot() {
     fi
 }
 
-bsql() {
-    if [[ $1 =~ ^("bzx"|"byx"|"edga"|"edgx"|"opt"|"exo"|"ctwo"|"cone"|"cfe"|"idx"|"usc"|"global"|"mnow")$ ]]; then
-        bsql.sh $(whoami)_$1 $2 $3
-    else
-        bsql.sh $1 $2 $3
-    fi
-}
-csql() {
-    if [[ $1 =~ ^("bzx"|"byx"|"edga"|"edgx"|"opt"|"exo"|"ctwo"|"cone"|"cfe"|"idx"|"usc"|"global"|"mnow")$ ]]; then
-        csql.sh $(whoami)_$1 $2 $3
-    else
-        csql.sh $1 $2 $3
-    fi
+bbsql() {
+    bsql.sh $(whoami)_$1 $2 $3
 }
 
 goto() {
@@ -163,21 +146,6 @@ if [ -f ~/source/util/bash_completions.sh ]; then
         export BSQL_ENVIRONMENT_FILTER="^${USER}_|^[^_]+\$"
        . ~/source/util/bash_completions.sh
 fi
-
-function split_par_file() {
-    unzip $1
-    FILE=${1//".zip"}
-
-    NUMLINES=$(wc -l < $FILE)
-    PARTITION=$(expr $NUMLINES / 5)
-    split -l $PARTITION --numeric-suffixes=1 --additional-suffix .csv $FILE ${FILE/.csv/_}
-    for fl in *${FILE/.csv/_0}*; do
-        zip -m $fl.zip $fl
-    done
-
-    rm $FILE
-    ll -h
-}
 
 # auto completion for nosetests (tam)
 . ~/source/util/nosetests_complete
