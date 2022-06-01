@@ -1,6 +1,6 @@
 1. install neovim 0.5:
     - mkdir ~/apps/neovim && cd ~/apps/neovim
-    - wget https://github.com/neovim/neovim/releases/download/v0.5.0/nvim.appimage
+    - wget https://github.com/neovim/neovim/releases/download/nightly/nvim.appimage
     - chmod u+x nvim.appimage
 2. install fuse and fuse-lib if you cannot run this: ./nvim.appimage
 3. Install paq-nvim (package manager)
@@ -23,7 +23,7 @@
         fi
     ```
     c. `chmod u+x ~/.local/bin/nvim`
-    d. make sure `~/.local/bin` is in your path (it should be)    - deactivate
+    d. make sure `~/.local/bin` is in your path (it should be)
 
 7. Launch neovim and run the following:
     - :PaqInstall
