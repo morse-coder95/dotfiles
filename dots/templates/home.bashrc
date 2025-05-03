@@ -1,17 +1,5 @@
 export PYTHONPATH="/home/nmorse"
 export PATH="$PATH:/home/nmorse/ace/scripts"
-export PAGER="less -S" psql
-
-alias st="git status"
-alias ga="git add -A"
-
-set -o vi
-
-cdir () {
-    mkdir -p -- "$1" &&
-        cd -P -- "$1"
-}
-
 
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)

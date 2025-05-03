@@ -1,7 +1,3 @@
-# .bashrc
-
-set -o vi
-
 # Source global definitions
 if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
@@ -25,14 +21,10 @@ fi
 alias myssh='eval $(ssh-agent) && ssh-add && ln -sf ${SSH_AUTH_SOCK} ~/.ssh/ssh_auth_sock'
 alias nodes="cd ~/db/nodes && ls"
 alias cdp="cd ~/source/python"
-alias st="git status"
-alias ga="git add -A"
 alias jump="ssh lxlc-jump05"
 alias jumpuk="ssh scolinjh1.uk.cboe.net"
 alias mylogs="git log --author $(whoami) --stat"
 alias npmrun='NODE_OPTIONS="--max-old-space-size=4096" npm run server'
-
-alias vim="~/.local/bin/nvim"
 
 alias sn='syseng-nodectl'
 alias snl='syseng-nodectlv3 --environment=syseng-production  list '

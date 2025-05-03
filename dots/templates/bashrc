@@ -1,4 +1,15 @@
+set -o vi
+
 alias vim="~/.local/bin/nvim"
+alias st="git status"
+alias ga="git add -A"
+
+cdir () {
+    mkdir -p -- "$1" &&
+        cd -P -- "$1"
+}
+
+export PAGER="less -S" psql
 
 {% if HOST in ('work') %}
 
