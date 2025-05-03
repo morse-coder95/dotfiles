@@ -1,0 +1,244 @@
+snippet function "Function definition"
+CREATE OR REPLACE FUNCTION ${1:my_function}
+()
+RETURNS
+	${2:trigger}
+AS
+$$
+BEGIN
+	$0
+END;
+$$
+LANGUAGE plpgsql STABLE;
+endsnippet
+
+snippet table "Table defintion"
+SET SESSION authorization ${READWRITE_USR};
+
+CREATE TABLE ${CORE_SCHEMA}.${1:my_table}
+(
+	$0
+)
+TABLESPACE ${DATA_TABLESPACE_NAME};
+
+SELECT grant_crud('$1');
+SELECT grant_select('$1');
+endsnippet
+
+snippet trigger "Trigger definition"
+CREATE TRIGGER
+	${1:my_trigger}
+${2:BEFORE}
+	${3:INSERT OR UPDATE OR DELETE}
+ON
+	${4:my_table}
+FOR EACH
+	${5:ROW}
+EXECUTE PROCEDURE
+	${6:tr_my_function}()
+;
+endsnippet
+
+snippet primarykey "Primary key definition"
+ALTER TABLE
+	${1:my_table}
+ADD CONSTRAINT
+	$1_pk
+PRIMARY KEY
+	(${2:column})
+USING INDEX TABLESPACE
+	${IDX_TABLESPACE_NAME}
+;
+endsnippet
+
+snippet setsession "Set Session"
+SET SESSION authorization ${${1:READWRITE_USR}};
+endsnippet
+
+snippet include "Include MAKO directive"
+<%include file="/include/${1:my_file}"/>
+endsnippet
+
+snippet batch_script "insert into batch_script"
+INSERT INTO batch_script
+(
+	name,
+	type,
+	category,
+	usr,
+	privilege
+) VALUES
+(
+	'${1:file_name}',
+	'framework',
+	'${2:category}',
+	(SELECT value || 'user' FROM script_param WHERE name = 'system' AND script_name = 'any'),
+	'batch'
+);
+endsnippet
+
+snippet batch_job "insert into batch_job"
+INSERT INTO batch_job
+(
+	name,
+	data_center_name,
+	batch_script_name,
+	batch_calendar_name,
+	machine_pin_by_process,
+	alert_priority,
+	privilege,
+	notification_group_name,
+    restarts,
+    min_wait_between_restarts
+) VALUES
+(
+	'${1:name}',
+	'${2:dc}',
+	'$1.py',
+	'market days',
+	'batch',
+	'daytimehours',
+	'batch',
+	'batch',
+    0,
+    0
+);
+endsnippet
+
+snippet batch_job_arg "insert into batch_job_arg"
+INSERT INTO batch_job_arg
+(
+	batch_job_name,
+	data_center_name,
+	begin_dt,
+	end_dt,
+	args
+) VALUES
+(
+	'${1:job_name}',
+	'${2:dc}',
+	${3:default},
+	${4:default},
+	'${4:--args}'
+);
+endsnippet
+
+snippet batch_job_resource "insert into batch_job_resource"
+INSERT INTO batch_job_resource
+(
+	batch_job_name,
+	data_center_name,
+	batch_job_resource_name,
+	resource_name,
+	begin_dt,
+	end_dt
+) VALUES
+(
+	'${1:batch_job_name}',
+	'${2:dc}',
+	'${3:batch_job_resource_name}',
+	'${4:resource_name}',
+	${5:default},
+	${6:default}
+);
+endsnippet
+
+snippet batch_job_dependency "insert into batch_job_dependency"
+INSERT INTO batch_job_dependency
+(
+	batch_job_name,
+	data_center_name,
+	batch_dependency_id,
+	begin_dt,
+	end_dt
+) VALUES
+(
+	'${1:batch_job_name}',
+	'${2:dc}',
+	(${3:dep_id}),
+	${4:default},
+	${5:default}
+);
+endsnippet
+
+snippet job_setup "Batch Job Setup"
+DO                                                              
+$$                                                              
+	DECLARE data_centers text[] := ARRAY[${1:'secaucus', 'chicago'}];
+	DECLARE dc text;                                      
+	DECLARE script_name text := '${2:script_name}';
+	DECLARE job_name text := '${3:job_name}';
+	DECLARE start_dt date := ${4:(select current_date)};
+
+	BEGIN                                                       
+		INSERT INTO batch_script(name, type, category, usr, privilege) VALUES
+		(
+			script_name,
+			'framework',
+			'${5:category}',
+			(SELECT value || 'user' FROM script_param sc WHERE sc.name = 'system' AND sc.script_name = 'any'),
+			'batch'
+		);
+
+		FOREACH dc IN ARRAY data_centers LOOP                   
+			INSERT INTO batch_job
+			(
+				name,
+				data_center_name,
+				batch_script_name,
+				batch_calendar_name,
+				machine_pin_by_process,
+				restarts,
+				min_wait_between_restarts,
+				alert_priority,
+				privilege,
+				notification_group_name
+			) VALUES
+			(
+				job_name,
+				dc,
+				script_name,
+				'market days',
+				'batch',
+				0,
+				0,
+				'daytimehours',
+				'batch',
+				'batch'
+			);
+
+			INSERT INTO batch_job_arg(batch_job_name, data_center_name, begin_dt, args) VALUES
+			(
+				job_name,
+				dc,
+				start_dt,
+				'${6:--args}'
+			);
+
+		END LOOP;                                               
+	END;                                                        
+$$;
+endsnippet
+
+snippet requeue "requeue batch job"
+UPDATE batch_job_status SET status = 'queued' WHERE batch_job_name = '${1:batch_job_name}' AND batch_dt = '${2:today}';
+SELECT * FROM batch_job_status WHERE batch_job_name = '$1' AND batch_dt = '$2';
+endsnippet
+
+snippet skip "skip batch job"
+UPDATE batch_job_status SET status = 'skipped' WHERE batch_job_name = '${1:batch_job_name}' AND batch_dt = '${2:today}';
+SELECT * FROM batch_job_status WHERE batch_job_name = '$1' AND batch_dt = '$2';
+endsnippet
+
+snippet pause "pause batch job"
+UPDATE batch_job_status SET status = 'paused' WHERE batch_job_name = '${1:batch_job_name}' AND batch_dt = '${2:today}';
+SELECT * FROM batch_job_status WHERE batch_job_name = '$1' AND batch_dt = '$2';
+endsnippet
+
+snippet install_bits "installation variable declarations"
+{% raw %}
+{% set DC = "'${1:dc}'" %}
+{% set START_DT = "'${2:start_dt}'" %}
+{% include 'helper-functions.sql' %}
+{% endraw %}
+endsnippet

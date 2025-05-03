@@ -1,0 +1,11 @@
+alias vim="~/.local/bin/nvim"
+
+{% if HOST in ('work') %}
+
+{% include 'work.bashrc' %}
+
+{% else %}
+
+{% include 'home.bashrc' %}
+
+{% endif %}
