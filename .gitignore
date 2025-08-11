@@ -3,5 +3,4 @@ __pycache__/
 *.pyc
 
 # don't store build directory
-/compiled/
-/dots/compiled/
+compiled/

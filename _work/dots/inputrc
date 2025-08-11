@@ -1,6 +1,0 @@
-set editing-mode vi
-set keymap vi-command
-
-"\C-n":fzf-branch-widget
-"\C-n":fzf-branch-widget
-"\C-n":fzf-branch-widget

@@ -29,6 +29,7 @@ Plug 'github/copilot.vim'
 
 vim.call('plug#end')
 
+vim.g['python3_host_prog'] = '/home/nmorse/.virtualenvs/nvim/bin/python3'
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
@@ -65,7 +66,9 @@ require('neoclip').setup {}
 
 local lspconfig = require('lspconfig')
 lspconfig.pylsp.setup {
+    {% if HOST in ('work') %}
     root_dir = function() return "/opt/ecn/users/" .. vim.env.USER .. "/source/ecn/source/python" end,
+    {% endif %}
     cmd = {vim.env.HOME .. '/.virtualenvs/nvim/bin/pylsp'},
 }
 

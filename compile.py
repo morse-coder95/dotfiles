@@ -24,25 +24,28 @@ def get_host_type():
     host = gethostname()
     return {
         "chlc-nmor01.etc.cboe.net": Host.Work,
-        "lxlc-nmor02.etc.cboe.net": Host.Work,
+        "c3lc-nmor01.etc.cboe.net": Host.Work,
         "morsecodingmachine": Host.Home,
     }[host].value
 
 
 class ConfigFile:
-    def __init__(self, template_file, destination_file, symlink_path):
-        self.template_file = template_file
-        self.destination_file = destination_file
+    def __init__(self, template_file_name, symlink_path):
+        self.template_file_name = template_file_name
         self.symlink_path = symlink_path
 
-        self.template_path = os.path.join(DOTFILES_ROOT, "templates/", self.template_file)
-        self.output_path = os.path.join(DOTFILES_ROOT, "compiled/", self.destination_file)
+        self.template_path = os.path.join(DOTFILES_ROOT, "templates/", self.template_file_name)
+        self.output_path = os.path.join(DOTFILES_ROOT, "compiled/", self.template_file_name)
 
 
 FILES = [
-    ConfigFile("tmux.conf", "tmux.conf", "~/.tmux.conf"),
-    ConfigFile("init.lua", "init.lua", "~/.config/nvim/init.lua"),
-    ConfigFile("bashrc", "bashrc", "~/.bashrc"),
+    ConfigFile("tmux.conf", "~/.tmux.conf"),
+    ConfigFile("init.lua", "~/.config/nvim/init.lua"),
+    ConfigFile("bashrc", "~/.bashrc"),
+    ConfigFile("inputrc", "~/.inputrc"),
+    ConfigFile("psqlrc", "~/.psqlrc"),
+    ConfigFile("python.snippets", "~/.config/nvim/UltiSnips/python.snippets"),
+    ConfigFile("sql.snippets", "~/.config/nvim/UltiSnips/sql.snippets"),
 ]
 
 
@@ -76,8 +79,7 @@ def create_symlink(target, link_path):
     link_path = os.path.expanduser(link_path)
     log.info(f"Creating symlink to {target} at {link_path}")
     if os.path.islink(link_path):
-        log.info("Symlink already exists")
-        return
+        os.remove(link_path)
     if os.path.isfile(link_path):
         os.remove(link_path)
     os.symlink(target, link_path)

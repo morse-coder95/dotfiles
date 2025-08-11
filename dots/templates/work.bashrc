@@ -3,11 +3,11 @@ if [ -f /etc/bashrc ]; then
 	. /etc/bashrc
 fi
 
+set -o vi
 
 export ECN_ENVIRONMENT=${USER}_bzx
 export TERM="screen-256color"
 export DJANGO_SETTINGS_MODULE=intranet.batsint.settings
-
 
 export VISUAL="~/.local/bin/nvim"
 export EDITOR="$VISUAL"
@@ -27,11 +27,12 @@ alias mylogs="git log --author $(whoami) --stat"
 alias npmrun='NODE_OPTIONS="--max-old-space-size=4096" npm run server'
 
 alias sn='syseng-nodectl'
-alias snl='syseng-nodectlv3 --environment=syseng-production  list '
-alias sne='syseng-nodectlv3 --environment=syseng-production  update --message "Read Only" --edit '
+alias snl='syseng-nodectl --environment=syseng-production list '
 function snu() {
     syseng-nodectlv3 --environment=syseng-production update --message "$1" --edit $2
 }
+alias build_hosts="syseng-nodectl list | jq -r '.[] | select(.role_name == \"bats-build-incredibuild\" and .pre_production == false) | .name'"
+alias jump_hosts="syseng-nodectl list | jq -r '.[] | select(.role_name == \"jump-host\" and .pre_production == false) | .name'"
 
 function pt() {
     pytest -sv --disable-warnings $@
@@ -41,10 +42,18 @@ function ptx() {
     pytest -svx --disable-warnings $@
 }
 
-fzf-branch-widget() {
-  local selected="$(git branch | fzf | sed -e 's/^[ \t]*//')"
-  READLINE_LINE="${READLINE_LINE:0:$READLINE_POINT}$selected${READLINE_LINE:$READLINE_POINT}"
-  READLINE_POINT=$((READLINE_POINT + ${#selected}))
+fcb() {
+  local branches branch
+  branches=$(git --no-pager branch -vv) &&
+  branch=$(echo "$branches" | fzf +m) &&
+  git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
+}
+
+fcd() {
+  local dir
+  dir=$(find ${1:-.} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
 }
 
 function bs() {
@@ -60,9 +69,8 @@ function bs() {
             shift 2
         fi
 
-        set -x
-        bootstrap.py -dfq --db-types=$DBTYPES --skip-vault --skip-kudu --skip-docs "$@" $DBENV
-        set +x
+        cmd="bootstrap.py -dfq --db-types=$DBTYPES --skip-vault --skip-kudu --skip-docs --skip-kafka $@ $DBENV"
+        echo $cmd && eval $cmd
     fi
 }
 
@@ -78,7 +86,7 @@ parse_git_branch() {
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
 }
 
-export PS1="\[\e[32m\]\@\[\e[m\] \[\e[35m\]\h\[\e[m\] \[\e[31m\]\w\[\e[m\]\n\[\e[34m\](\`parse_git_branch\`)\[\e[m\] >> "
+export PS1="\[\e[32m\]\@\[\e[m\] \[\e[35m\]\h\[\e[m\] \[\e[31m\]\w\[\e[m\]\n\[\e[1;34m\](\`parse_git_branch\`)\[\e[m\] >> "
 
 # shortcut for sending files to Windows
 function sendme()
@@ -101,6 +109,3 @@ if [ -f ~/source/util/bash_completions.sh ]; then
         export BSQL_ENVIRONMENT_FILTER="^${USER}_|^[^_]+\$"
        . ~/source/util/bash_completions.sh
 fi
-
-# auto completion for nosetests (tam)
-. ~/source/util/pytest_complete
