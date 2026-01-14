@@ -1,0 +1,7 @@
+#! /bin/bash
+
+if [ ! "$#" -gt 0 ] ; then
+    source ~/.virtualenvs/nvim/bin/activate && ~/apps/neovim/nvim.appimage && deactivate
+else
+    source ~/.virtualenvs/nvim/bin/activate && ~/apps/neovim/nvim.appimage "$@" && deactivate
+fi
