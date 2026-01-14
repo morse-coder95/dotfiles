@@ -1,11 +1,5 @@
 #! /bin/bash
 
-echo "Reloading bashrc..."
-. ~/.bashrc
-
-echo "Sourcing tmux conf..."
-tmux source-file ~/.tmux.conf
-
 echo "Installing FZF..."
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
