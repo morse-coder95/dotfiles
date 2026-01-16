@@ -4,7 +4,7 @@ local Plug = vim.fn['plug#']
 vim.call('plug#begin', '~/.config/nvim/plugged/')
 
 Plug 'windwp/nvim-autopairs'  -- auto-close quotes, parens, brackets
-Plug 'nvim-treesitter/nvim-treesitter'  -- syntax highlighting and code understanding
+Plug('nvim-treesitter/nvim-treesitter', {['do'] = ':TSUpdate'}) -- syntax highlighting and code understanding
 Plug 'nvim-lualine/lualine.nvim'  -- status line with git info, file info, mode indicator
 Plug 'luxed/ayu-vim'  -- ayu dark colorscheme
 Plug 'folke/which-key.nvim'  -- popup showing available keybindings
@@ -23,6 +23,8 @@ Plug 'tpope/vim-fugitive'  -- git integration (used for branch name in statuslin
 Plug 'kkharji/sqlite.lua'  -- SQLite database for persistent storage (required by neoclip)
 Plug 'AckslD/nvim-neoclip.lua'  -- clipboard history manager
 Plug 'fisadev/vim-isort'  -- Python import sorter
+-- Plug 'jose-elias-alvarez/null-ls.nvim'  -- for formatting/linting
+Plug 'nvim-lua/plenary.nvim'  -- required by null-ls
 
 vim.call('plug#end')
 
@@ -55,6 +57,22 @@ vim.api.nvim_create_autocmd('FileType', {
     end
 })
 
+-- Auto-detect indentation for JS/TS files
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = {'javascript', 'typescript', 'typescriptreact', 'javascriptreact', 'json', 'html', 'css'},
+    callback = function()
+        vim.opt_local.shiftwidth = 2
+        vim.opt_local.tabstop = 2
+    end
+})
+
+-- Better JSX/TSX commenting (works with Comment.nvim)
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = {'typescriptreact', 'javascriptreact'},
+    callback = function()
+        vim.bo.commentstring = '// %s'
+    end
+})
 
 require('neoclip').setup({
     enable_persistent_history = true,
@@ -78,6 +96,34 @@ vim.lsp.config(
         }
     }
 )
+
+-- TypeScript LSP with custom diagnostic settings
+vim.lsp.enable('ts_ls')
+vim.lsp.config('ts_ls', {
+    cmd = {'typescript-language-server', '--stdio'},
+    on_attach = function(client, bufnr)
+        -- These settings only apply to TypeScript buffers
+        vim.diagnostic.config({
+            virtual_text = true,
+            signs = true,
+            update_in_insert = false,
+        }, bufnr)  -- Note the bufnr parameter - makes it buffer-local
+    end
+})
+
+-- ESLint LSP
+--vim.lsp.enable('eslint')
+--vim.lsp.config('eslint', {
+--    cmd = {'vscode-eslint-language-server', '--stdio'}
+--})
+
+-- local null_ls = require('null-ls')
+-- null_ls.setup({
+--     sources = {
+--         null_ls.builtins.formatting.prettier,  -- auto-format JS/TS/JSON/CSS
+--     },
+-- })
+
 
 -- nvim-cmp setup
 local cmp = require('cmp')
@@ -173,10 +219,20 @@ require('gitsigns').setup({
     },
 })
 
-require('nvim-treesitter').setup {
+require('nvim-treesitter').setup({
+    ensure_installed = {
+        'python',
+        'lua',
+        'typescript',
+        'tsx',
+        'javascript',
+        'html',
+        'css',
+        'json'
+    },
     highlight = {enable = true}, 
     indent = {enable = true}
-}
+})
 
 require('hop').setup {}
 
@@ -277,5 +333,8 @@ wk.add({
 
     { "<leader>r", '<cmd>lua require("neoclip.fzf")()<CR>', desc = "registers (neoclip)" },
     { "<leader>s", "<cmd>source ~/.config/nvim/init.lua<CR>", desc = "source config file" },
+    { "<leader>t", group = "typescript/javascript" },
+    { "<leader>tf", function() vim.lsp.buf.format({ timeout_ms = 10000 }) end, desc = "format (prettier)" },
+    { "K", "<cmd>lua vim.lsp.buf.hover()<CR>", desc = "hover documentation" },
 })
 require('which-key').setup {}
