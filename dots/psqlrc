@@ -1,0 +1,4 @@
+\setenv PAGER 'less -S'
+\pset pager always
+
+\set PROMPT1 '%m:%/%R%x%# '

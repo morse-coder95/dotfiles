@@ -11,6 +11,7 @@ fi
 export TERM="screen-256color"
 export VISUAL="/home/nmorse/.local/bin/nvim"
 export EDITOR="$VISUAL"
+export PAGER="less -S"
 
 
 if [ -f ~/.git-completion.bash ]; then
@@ -18,6 +19,7 @@ if [ -f ~/.git-completion.bash ]; then
 fi
 
 # User specific aliases and functions
+alias ls='ls --color=auto'
 alias st="git status"
 alias ga="git add -A"
 alias vim="~/.local/bin/nvim"
@@ -63,3 +65,41 @@ export PS1="\[\e[32m\]\@\[\e[m\] \[\e[35m\]\h\[\e[m\] \[\e[31m\]\w\[\e[m\]\n\[\e
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
+
+[ -f ~/.secrets ] && source ~/.secrets
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+alias claude-mem='/home/nmorse/.bun/bin/bun "/home/nmorse/.claude/plugins/marketplaces/thedotmack/plugin/scripts/worker-service.cjs"'
+
+osql() {
+  case "$1" in
+    dev)
+      psql -U overrule_user -d overrule_db
+      ;;
+    staging)
+      psql 'postgresql://overrule_user@ep-holy-violet-ah23szii.c-3.us-east-1.aws.neon.tech/overrule_db?sslmode=require&channel_binding=require&options=-csearch_path%3Doverrule%2Cpublic'
+      ;;
+    prod)
+      psql 'postgresql://overrule_user@ep-bold-fog-ahg4azli.c-3.us-east-1.aws.neon.tech/overrule_db?sslmode=require&channel_binding=require&options=-csearch_path%3Doverrule%2Cpublic'
+      ;;
+    *)
+      echo "Usage: osql {dev|staging|prod}"
+      return 1
+      ;;
+  esac
+}
+
+vsql() {
+  case "$1" in
+    dev)
+      psql "$VDR_DEV_POSTGRES_URL"
+      ;;
+    *)
+      echo "Usage: vsql {dev}"
+      return 1
+      ;;
+  esac
+}

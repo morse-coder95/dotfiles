@@ -18,7 +18,7 @@ Plug 'phaazon/hop.nvim'  -- jump to any word or line with <leader>hw / <leader>h
 Plug 'numToStr/Comment.nvim'  -- toggle comments with <leader>c
 Plug 'lewis6991/gitsigns.nvim'  -- show git diff markers, stage hunks, blame
 Plug 'vim-scripts/BufOnly.vim'  -- close all buffers except current one
-Plug('ibhagwan/fzf-lua', {['branch'] = 'main'})  -- fuzzy finder for files, text, help, etc
+Plug('ibhagwan/fzf-lua')  -- fuzzy finder for files, text, help, etc
 Plug 'tpope/vim-fugitive'  -- git integration (used for branch name in statusline)
 Plug 'kkharji/sqlite.lua'  -- SQLite database for persistent storage (required by neoclip)
 Plug 'AckslD/nvim-neoclip.lua'  -- clipboard history manager
@@ -219,19 +219,15 @@ require('gitsigns').setup({
     },
 })
 
-require('nvim-treesitter').setup({
-    ensure_installed = {
-        'python',
-        'lua',
-        'typescript',
-        'tsx',
-        'javascript',
-        'html',
-        'css',
-        'json'
-    },
-    highlight = {enable = true}, 
-    indent = {enable = true}
+-- Install treesitter parsers (new API - no highlight/indent options)
+require('nvim-treesitter').install({
+    'python', 'lua', 'typescript', 'tsx', 'javascript', 'html', 'css', 'json'
+})
+
+-- Enable treesitter highlighting for these filetypes
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = { 'python', 'lua', 'typescript', 'typescriptreact', 'javascript', 'javascriptreact', 'html', 'css', 'json' },
+    callback = function() vim.treesitter.start() end,
 })
 
 require('hop').setup {}
