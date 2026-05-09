@@ -95,10 +95,13 @@ osql() {
 vsql() {
   case "$1" in
     dev)
-      psql "$VDR_DEV_POSTGRES_URL"
+      psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
+      ;;
+    staging)
+      psql "$VDR_STAGING_POSTGRES_URL"
       ;;
     *)
-      echo "Usage: vsql {dev}"
+      echo "Usage: vsql {dev|staging}"
       return 1
       ;;
   esac
