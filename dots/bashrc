@@ -98,7 +98,7 @@ vsql() {
       psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
       ;;
     staging)
-      psql "$VDR_STAGING_POSTGRES_URL"
+      psql "$VDR_STAGING_POOLER_URL"
       ;;
     *)
       echo "Usage: vsql {dev|staging}"
