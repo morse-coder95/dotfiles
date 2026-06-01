@@ -93,15 +93,59 @@ osql() {
 }
 
 vsql() {
-  case "$1" in
+  local env="${1:-}"
+  local mode="${2:-ro}"
+
+  local db_url
+  case "$env" in
     dev)
-      psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
+      db_url="postgresql://postgres:postgres@127.0.0.1:54322/postgres"
       ;;
     staging)
-      psql "$VDR_STAGING_POOLER_URL"
+      if [ -z "${SWITCHBOARD_STAGING_POSTGRES_URL:-}" ]; then
+        echo "Error: SWITCHBOARD_STAGING_POSTGRES_URL not set in ~/.secrets"
+        return 1
+      fi
+      db_url="$SWITCHBOARD_STAGING_POSTGRES_URL"
+      ;;
+    prod)
+      if [ -z "${SWITCHBOARD_PROD_POSTGRES_URL:-}" ]; then
+        echo "Error: SWITCHBOARD_PROD_POSTGRES_URL not set in ~/.secrets"
+        return 1
+      fi
+      db_url="$SWITCHBOARD_PROD_POSTGRES_URL"
       ;;
     *)
-      echo "Usage: vsql {dev|staging}"
+      echo "Usage: vsql {dev|staging|prod} [ro|rw]"
+      return 1
+      ;;
+  esac
+
+  case "$mode" in
+    ro)
+      echo "(read-only — use 'vsql $env rw' for read-write access)"
+      local tmprc
+      tmprc=$(mktemp)
+      printf 'SET SESSION CHARACTERISTICS AS TRANSACTION READ ONLY;\n' > "$tmprc"
+      PSQLRC="$tmprc" psql "$db_url"
+      rm -f "$tmprc"
+      ;;
+    rw)
+      if [ "$env" = "prod" ]; then
+        printf '\n'
+        printf '\033[1;37;41m  ╔══════════════════════════════════════════════════════╗  \033[0m\n'
+        printf '\033[1;37;41m  ║       ⚠   PRODUCTION — READ-WRITE psql   ⚠           ║  \033[0m\n'
+        printf '\033[1;37;41m  ╚══════════════════════════════════════════════════════╝  \033[0m\n'
+        printf '\n'
+      fi
+      if [ "$env" != "dev" ]; then
+        read -rp "Connect read-write to $env? Type 'yes' to confirm: " confirm
+        if [ "$confirm" != "yes" ]; then echo "Aborted."; return 1; fi
+      fi
+      psql "$db_url"
+      ;;
+    *)
+      echo "Usage: vsql {dev|staging|prod} [ro|rw]"
       return 1
       ;;
   esac
